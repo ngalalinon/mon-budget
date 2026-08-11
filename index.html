@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mon Budget</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+input,
+select,
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+button {
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #218838;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background: #28a745;
+    color: white;
+}
+
+.total {
+    font-size: 22px;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💰 Mon Budget</h1>
+
+    <input
+        type="text"
+        id="description"
+        placeholder="Description"
+    >
+
+    <input
+        type="number"
+        id="montant"
+        placeholder="Montant en €"
+    >
+
+    <select id="type">
+        <option value="revenu">Revenu</option>
+        <option value="depense">Dépense</option>
+    </select>
+
+    <button onclick="ajouter()">
+        Ajouter
+    </button>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Montant</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+
+        <tbody id="liste">
+        </tbody>
+
+    </table>
+
+    <div class="total" id="solde">
+        Solde : 0 €
+    </div>
+
+</div>
+
+
+<script>
+
+let operations =
+    JSON.parse(localStorage.getItem("operations")) || [];
+
+
+function afficher() {
+
+    const liste = document.getElementById("liste");
+
+    liste.innerHTML = "";
+
+    let solde = 0;
+
+
+    operations.forEach(function(operation) {
+
+        const ligne = document.createElement("tr");
+
+
+        ligne.innerHTML = `
+            <td>${operation.description}</td>
+
+            <td>${operation.montant.toFixed(2)} €</td>
+
+            <td>${operation.type}</td>
+        `;
+
+
+        liste.appendChild(ligne);
+
+
+        if (operation.type === "revenu") {
+
+            solde += operation.montant;
+
+        } else {
+
+            solde -= operation.montant;
+
+        }
+
+    });
+
+
+    document.getElementById("solde").innerText =
+        "Solde : " + solde.toFixed(2) + " €";
+
+
+    localStorage.setItem(
+        "operations",
+        JSON.stringify(operations)
+    );
+
+}
+
+
+function ajouter() {
+
+    const description =
+        document.getElementById("description").value;
+
+    const montant =
+        parseFloat(
+            document.getElementById("montant").value
+        );
+
+    const type =
+        document.getElementById("type").value;
+
+
+    if (
+        description.trim() === "" ||
+        isNaN(montant) ||
+        montant <= 0
+    ) {
+
+        alert("Veuillez remplir correctement les champs.");
+
+        return;
+    }
+
+
+    operations.push({
+
+        description: description,
+
+        montant: montant,
+
+        type: type
+
+    });
+
+
+    document.getElementById("description").value = "";
+
+    document.getElementById("montant").value = "";<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mon Budget</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+input,
+select,
+button {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+button {
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #218838;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background: #28a745;
+    color: white;
+}
+
+.total {
+    font-size: 22px;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>💰 Mon Budget</h1>
+
+    <input
+        type="text"
+        id="description"
+        placeholder="Description"
+    >
+
+    <input
+        type="number"
+        id="montant"
+        placeholder="Montant en €"
+    >
+
+    <select id="type">
+        <option value="revenu">Revenu</option>
+        <option value="depense">Dépense</option>
+    </select>
+
+    <button onclick="ajouter()">
+        Ajouter
+    </button>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Montant</th>
+                <th>Type</th>
+            </tr>
+        </thead>
+
+        <tbody id="liste">
+        </tbody>
+
+    </table>
+
+    <div class="total" id="solde">
+        Solde : 0 €
+    </div>
+
+</div>
+
+
+<script>
+
+let operations =
+    JSON.parse(localStorage.getItem("operations")) || [];
+
+
+function afficher() {
+
+    const liste = document.getElementById("liste");
+
+    liste.innerHTML = "";
+
+    let solde = 0;
+
+
+    operations.forEach(function(operation) {
+
+        const ligne = document.createElement("tr");
+
+
+        ligne.innerHTML = `
+            <td>${operation.description}</td>
+
+            <td>${operation.montant.toFixed(2)} €</td>
+
+            <td>${operation.type}</td>
+        `;
+
+
+        liste.appendChild(ligne);
+
+
+        if (operation.type === "revenu") {
+
+            solde += operation.montant;
+
+        } else {
+
+            solde -= operation.montant;
+
+        }
+
+    });
+
+
+    document.getElementById("solde").innerText =
+        "Solde : " + solde.toFixed(2) + " €";
+
+
+    localStorage.setItem(
+        "operations",
+        JSON.stringify(operations)
+    );
+
+}
+
+
+function ajouter() {
+
+    const description =
+        document.getElementById("description").value;
+
+    const montant =
+        parseFloat(
+            document.getElementById("montant").value
+        );
+
+    const type =
+        document.getElementById("type").value;
+
+
+    if (
+        description.trim() === "" ||
+        isNaN(montant) ||
+        montant <= 0
+    ) {
+
+        alert("Veuillez remplir correctement les champs.");
+
+        return;
+    }
+
+
+    operations.push({
+
+        description: description,
+
+        montant: montant,
+
+        type: type
+
+    });
+
+
+    document.getElementById("description").value = "";
+
+    document.getElementById("montant").value = "";
+
+
+    afficher();
+
+}
+
+
+afficher();
+
+</script>
+
+</body>
+</html>
+
+
+    afficher();
+
+}
+
+
+afficher();
+
+</script>
+
+</body>
+</html>
