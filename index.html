@@ -12,26 +12,76 @@
 
 <style>
 
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
-    background: #f4f4f4;
+    background: #f1f3f6;
     margin: 0;
     padding: 20px;
 }
 
 .container {
-    max-width: 600px;
-    margin: 20px auto;
-    background: white;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    max-width: 800px;
+    margin: auto;
 }
 
 h1 {
     text-align: center;
-    color: #333;
+    color: #222;
     margin-bottom: 25px;
+}
+
+/* TABLEAU DE BORD */
+
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+.card p {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.solde p {
+    color: #007bff;
+}
+
+.revenus p {
+    color: #28a745;
+}
+
+.depenses p {
+    color: #dc3545;
+}
+
+/* FORMULAIRE */
+
+.form {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
 }
 
 input,
@@ -39,40 +89,50 @@ select,
 button {
     width: 100%;
     padding: 13px;
-    margin: 8px 0;
-    box-sizing: border-box;
+    margin: 7px 0;
     font-size: 16px;
+    border-radius: 6px;
 }
 
 input,
 select {
-    border: 1px solid #aaa;
-    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 button {
+    border: none;
     background: #28a745;
     color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
 }
 
 button:hover {
     background: #218838;
 }
 
+/* TABLE */
+
+.operations {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+}
+
+.operations h2 {
+    margin-top: 0;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 25px;
 }
 
 th,
 td {
-    border: 1px solid #ddd;
     padding: 10px;
+    border-bottom: 1px solid #ddd;
     text-align: center;
 }
 
@@ -81,22 +141,112 @@ th {
     color: white;
 }
 
-.total {
-    font-size: 24px;
-    margin-top: 25px;
-    text-align: center;
+.revenu {
+    color: #28a745;
     font-weight: bold;
+}
+
+.depense {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.delete {
+    background: #dc3545;
+    padding: 7px 10px;
+    width: auto;
+    margin: 0;
+}
+
+.delete:hover {
+    background: #b02a37;
+}
+
+.message {
+    text-align: center;
+    color: #777;
+    padding: 20px;
+}
+
+/* TELEPHONE */
+
+@media (max-width: 600px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .dashboard {
+        grid-template-columns: 1fr;
+    }
+
+    table {
+        font-size: 13px;
+    }
+
+    th,
+    td {
+        padding: 7px 3px;
+    }
+
 }
 
 </style>
 
 </head>
 
+
 <body>
 
 <div class="container">
 
 <h1>💰 Mon Budget</h1>
+
+
+<!-- TABLEAU DE BORD -->
+
+<div class="dashboard">
+
+    <div class="card solde">
+
+        <h3>💰 Solde</h3>
+
+        <p id="solde">
+            0.00 €
+        </p>
+
+    </div>
+
+
+    <div class="card revenus">
+
+        <h3>🟢 Revenus</h3>
+
+        <p id="revenus">
+            0.00 €
+        </p>
+
+    </div>
+
+
+    <div class="card depenses">
+
+        <h3>🔴 Dépenses</h3>
+
+        <p id="depenses">
+            0.00 €
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- FORMULAIRE -->
+
+<div class="form">
+
+<h2>Ajouter une opération</h2>
 
 <input
     type="text"
@@ -108,23 +258,33 @@ th {
     type="number"
     id="montant"
     placeholder="Montant en €"
+    step="0.01"
 >
 
 <select id="type">
 
     <option value="revenu">
-        Revenu
+        🟢 Revenu
     </option>
 
     <option value="depense">
-        Dépense
+        🔴 Dépense
     </option>
 
 </select>
 
 <button onclick="ajouter()">
-    Ajouter
+    ➕ Ajouter
 </button>
+
+</div>
+
+
+<!-- OPERATIONS -->
+
+<div class="operations">
+
+<h2>📋 Mes opérations</h2>
 
 <table>
 
@@ -138,6 +298,10 @@ th {
 
 <th>Type</th>
 
+<th>Date</th>
+
+<th>Action</th>
+
 </tr>
 
 </thead>
@@ -148,8 +312,13 @@ th {
 
 </table>
 
-<div class="total" id="solde">
-    Solde : 0 €
+<div
+    id="message"
+    class="message"
+>
+    Aucune opération pour le moment.
+</div>
+
 </div>
 
 </div>
@@ -157,94 +326,159 @@ th {
 
 <script>
 
-let operations = JSON.parse(
-    localStorage.getItem("operations")
-) || [];
+/* CHARGER LES OPERATIONS */
 
+let operations =
+    JSON.parse(
+        localStorage.getItem("operations")
+    ) || [];
+
+
+/* AFFICHER LES DONNEES */
 
 function afficher() {
 
-    const liste = document.getElementById("liste");
+    const liste =
+        document.getElementById("liste");
+
+    const message =
+        document.getElementById("message");
+
 
     liste.innerHTML = "";
 
-    let solde = 0;
+
+    let totalRevenus = 0;
+
+    let totalDepenses = 0;
 
 
-    operations.forEach(function(operation) {
+    if (operations.length === 0) {
 
-        const ligne = document.createElement("tr");
+        message.style.display = "block";
 
+    } else {
 
-        ligne.innerHTML =
+        message.style.display = "none";
 
-        "<td>" +
-        operation.description +
-        "</td>" +
-
-        "<td>" +
-        operation.montant.toFixed(2) +
-        " €</td>" +
-
-        "<td>" +
-        operation.type +
-        "</td>";
+    }
 
 
-        liste.appendChild(ligne);
+    operations.forEach(function(operation, index) {
 
 
         if (operation.type === "revenu") {
 
-            solde += operation.montant;
+            totalRevenus += operation.montant;
 
         } else {
 
-            solde -= operation.montant;
+            totalDepenses += operation.montant;
 
         }
+
+
+        const ligne =
+            document.createElement("tr");
+
+
+        ligne.innerHTML = `
+
+            <td>
+                ${operation.description}
+            </td>
+
+            <td>
+                ${operation.montant.toFixed(2)} €
+            </td>
+
+            <td class="${operation.type}">
+                ${
+                    operation.type === "revenu"
+                    ? "Revenu"
+                    : "Dépense"
+                }
+            </td>
+
+            <td>
+                ${operation.date}
+            </td>
+
+            <td>
+
+                <button
+                    class="delete"
+                    onclick="supprimer(${index})"
+                >
+                    🗑️
+                </button>
+
+            </td>
+
+        `;
+
+
+        liste.appendChild(ligne);
 
     });
 
 
+    const solde =
+        totalRevenus - totalDepenses;
+
+
     document.getElementById("solde").innerText =
-        "Solde : " + solde.toFixed(2) + " €";
+        solde.toFixed(2) + " €";
 
 
-    localStorage.setItem(
-        "operations",
-        JSON.stringify(operations)
-    );
+    document.getElementById("revenus").innerText =
+        totalRevenus.toFixed(2) + " €";
+
+
+    document.getElementById("depenses").innerText =
+        totalDepenses.toFixed(2) + " €";
+
+
+    sauvegarder();
 
 }
 
 
+/* AJOUTER UNE OPERATION */
+
 function ajouter() {
 
     const description =
-        document.getElementById("description").value;
+        document.getElementById("description").value.trim();
+
 
     const montant =
         parseFloat(
             document.getElementById("montant").value
         );
 
+
     const type =
         document.getElementById("type").value;
 
 
     if (
-        description.trim() === "" ||
+        description === "" ||
         isNaN(montant) ||
         montant <= 0
     ) {
 
         alert(
-            "Veuillez remplir correctement les champs."
+            "Veuillez remplir correctement les informations."
         );
 
         return;
+
     }
+
+
+    const aujourdHui =
+        new Date().toLocaleDateString("fr-FR");
 
 
     operations.push({
@@ -253,7 +487,9 @@ function ajouter() {
 
         montant: montant,
 
-        type: type
+        type: type,
+
+        date: aujourdHui
 
     });
 
@@ -267,6 +503,45 @@ function ajouter() {
 
 }
 
+
+/* SUPPRIMER */
+
+function supprimer(index) {
+
+    const confirmation =
+        confirm(
+            "Voulez-vous vraiment supprimer cette opération ?"
+        );
+
+
+    if (!confirmation) {
+
+        return;
+
+    }
+
+
+    operations.splice(index, 1);
+
+
+    afficher();
+
+}
+
+
+/* SAUVEGARDER */
+
+function sauvegarder() {
+
+    localStorage.setItem(
+        "operations",
+        JSON.stringify(operations)
+    );
+
+}
+
+
+/* AFFICHAGE INITIAL */
 
 afficher();
 
